@@ -1,0 +1,28 @@
+<mat-toolbar class="navigation-bar" color="primary">
+  <div class="title" routerLink="">
+    <img src="assets/logo_transparent.png" alt="Enlightened Academy logo" class="logo">
+  </div>
+  <button class="menu-toggle" mat-icon-button (click)="toggleMenu()" *ngIf="isHandset$ | async">
+    <mat-icon aria-label="Menu toggle icon">{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+  </button>
+  <ul class="nav-links" [class.open]="isMenuOpen && (isHandset$ | async)">
+    <li>
+      <a mat-button routerLink="">
+        <mat-icon>home</mat-icon>
+        Home
+      </a>
+    </li>
+    <li>
+      <a mat-button routerLink="/courses">
+        <mat-icon>book</mat-icon>
+        Courses
+      </a>
+    </li>
+    <li>
+      <a mat-button routerLink="/register">
+        <mat-icon>person</mat-icon>
+        Register
+      </a>
+    </li>
+  </ul>
+</mat-toolbar>

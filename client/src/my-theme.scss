@@ -1,0 +1,69 @@
+@import '../node_modules/@angular/material/theming';
+@import '~material-design-icons/iconfont/material-icons.css';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+$my-app-primary: mat-palette($mat-indigo, 800); // Updated primary color with a valid hue
+
+$my-app-accent: mat-palette($mat-pink, A200, A100, A400);
+$my-app-warn: mat-palette($mat-red);
+
+$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+$custom-checkbox-color: #302a77; // Updated custom theme color
+
+@include angular-material-theme($my-app-theme);
+// Define the color for your buttons and stepper.
+$my-button-color: mat-color($my-app-primary);
+
+// Theme the buttons.
+.mat-button,
+.mat-raised-button,
+.mat-flat-button,
+.mat-icon-button {
+    color: $my-button-color;
+    background-color: lighten($my-button-color, 50%);
+}
+
+// Theme the stepper.
+.mat-stepper-horizontal .mat-stepper-index,
+.mat-stepper-horizontal .mat-stepper-label {
+    color: $my-button-color;
+}
+
+.mat-stepper-horizontal .mat-stepper-header-container {
+    background-color: lighten($my-button-color, 50%);
+}
+
+// Styles to override stepper color
+::ng-deep .mat-stepper-horizontal .mat-step-header .mat-step-label.mat-step-label-active {
+    color: #fff !important;
+}
+
+::ng-deep .mat-stepper-horizontal .mat-step-header .mat-step-icon {
+    color: #fff !important;
+}
+
+.mat-checkbox.mat-accent .mat-checkbox-frame,
+.mat-checkbox.mat-accent .mat-checkbox-background {
+    background-color: $custom-checkbox-color !important;
+    border-color: $custom-checkbox-color !important;
+}
+
+.mat-checkbox.mat-accent .mat-checkbox-ripple .mat-ripple-element {
+    background-color: $custom-checkbox-color !important;
+}
+
+.mat-stepper-horizontal .mat-horizontal-stepper-header-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mat-stepper-horizontal .mat-horizontal-stepper-actions {
+    margin-left: 8px;
+    /* Add margin between the buttons */
+}
+
+// Use the Poppins font for the entire application
+$my-app-font-family: 'Poppins', sans-serif;

@@ -1,0 +1,227 @@
+<mat-card class="stepper-card">
+  <div class="stepper-container">
+    <mat-horizontal-stepper color="primary" class="stepper" [linear]="true">
+      <mat-step label="Student Information" [stepControl]="studentDataForm">
+        <div class="form-container">
+          <form [formGroup]="studentDataForm" (submit)="submitForm()">
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label> <mat-icon>person</mat-icon> First Name </mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="firstName"
+                  required
+                />
+                <mat-error
+                  *ngIf="
+                    studentDataForm.controls['firstName'].hasError('required')
+                  "
+                  >First Name is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label> <mat-icon>person</mat-icon> Last Name </mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="lastName"
+                  required
+                />
+                <mat-error
+                  *ngIf="
+                    studentDataForm.controls['lastName'].hasError('required')
+                  "
+                  >Last Name is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  <mat-icon>account_circle</mat-icon> CNIC
+                </mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="CNIC"
+                  required
+                  pattern="^\d{13}$"
+                />
+                <mat-error
+                  *ngIf="studentDataForm.controls['CNIC'].hasError('required')"
+                  >CNIC is required</mat-error
+                >
+                <mat-error
+                  *ngIf="studentDataForm.controls['CNIC'].hasError('pattern')"
+                  >Invalid CNIC (must be 13 digits)</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  <mat-icon>account_circle</mat-icon> Father's CNIC
+                </mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="fathersCNIC"
+                  required
+                  pattern="^\d{13}$"
+                />
+                <mat-error
+                  *ngIf="
+                    studentDataForm.controls['fathersCNIC'].hasError('required')
+                  "
+                  >Father's CNIC is required</mat-error
+                >
+                <mat-error
+                  *ngIf="
+                    studentDataForm.controls['fathersCNIC'].hasError('pattern')
+                  "
+                  >Invalid Father's CNIC (must be 13 digits)</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label> <mat-icon>mail</mat-icon> Email </mat-label>
+                <input matInput type="email" formControlName="email" required />
+                <mat-error
+                  *ngIf="studentDataForm.controls['email'].hasError('required')"
+                  >Email is required</mat-error
+                >
+                <mat-error
+                  *ngIf="studentDataForm.controls['email'].hasError('email')"
+                  >Invalid email</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  <mat-icon>location_on</mat-icon> Address
+                </mat-label>
+                <input
+                  matInput
+                  type="text"
+                  formControlName="address"
+                  required
+                />
+                <mat-error
+                  *ngIf="
+                    studentDataForm.controls['address'].hasError('required')
+                  "
+                  >Address is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label> <mat-icon>phone</mat-icon> Phone Number </mat-label>
+                <input
+                  matInput
+                  type="tel"
+                  formControlName="phone"
+                  required
+                  pattern="^0\d{10}$"
+                />
+                <mat-error
+                  *ngIf="studentDataForm.controls['phone'].hasError('required')"
+                  >Phone Number is required</mat-error
+                >
+                <mat-error
+                  *ngIf="studentDataForm.controls['phone'].hasError('pattern')"
+                  >Invalid Phone Number (must start with 0, 11
+                  digits)</mat-error
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>
+                  <mat-icon>date_range</mat-icon> Date of Birth
+                </mat-label>
+                <input
+                  matInput
+                  type="date"
+                  formControlName="dateOfBirth"
+                  required
+                />
+                <mat-error
+                  *ngIf="
+                    studentDataForm.controls['dateOfBirth'].hasError('required')
+                  "
+                  >Date of Birth is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <div class="form-group">
+              <mat-label>Gender</mat-label>
+              <mat-radio-group formControlName="gender">
+                <mat-radio-button color="primary" value="M"
+                  >Male</mat-radio-button
+                >
+                <mat-radio-button color="primary" value="F"
+                  >Female</mat-radio-button
+                >
+              </mat-radio-group>
+            </div>
+          </form>
+        </div>
+        <button mat-button matStepperNext class="navBtn">Next</button>
+      </mat-step>
+      <mat-step label="Course Registration" [stepControl]="courseForm">
+        <div class="list">
+          <div *ngFor="let course of availableCourses" class="course-item">
+            <mat-checkbox
+              color="primary"
+              [(ngModel)]="course.checked"
+              class="checkbox"
+              (change)="updateCourseSelection()"
+            >
+              {{ course.name }} - {{course.fee}} RS
+            </mat-checkbox>
+          </div>
+          <mat-error *ngIf="!isCourseSelected()">Please select at least one course</mat-error>
+        </div>
+        <ng-template matStepIcon>
+          <mat-icon>check</mat-icon>
+        </ng-template>
+        <div class="stepper-buttons">
+          <button mat-button matStepperPrevious class="navBtn">Back</button>
+          <button mat-button matStepperNext [disabled]="!isCourseSelected()" class="navBtn">
+            Next
+          </button>
+        </div>
+      </mat-step>
+      
+      <mat-step>
+        <ng-template matStepLabel> Confirm </ng-template>
+        <div class="confirm-container">
+          <div class="centered-card">
+            <mat-card class="confirmation-tile">
+              <mat-card-title>
+                Are you sure you want to proceed with the Registration?
+              </mat-card-title>
+              <mat-card-actions>
+                <button mat-button (click)="postEnrollment()">Yes</button>
+                <button mat-button matStepperPrevious>No</button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</mat-card>
