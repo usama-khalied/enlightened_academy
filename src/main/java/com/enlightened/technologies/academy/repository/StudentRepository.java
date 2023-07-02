@@ -11,5 +11,7 @@ import org.springframework.data.repository.query.Param;
  */
 public interface StudentRepository extends JpaRepository<Student, String> {
 
-    List<Student> findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    Student findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    Student findByEmail(@Param("email") String email);
 }

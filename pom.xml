@@ -11,7 +11,7 @@
     <groupId>com.enlightened.technologies</groupId>
     <artifactId>academy</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>academy</name>
+    <name>enlightened_academy</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
@@ -94,6 +94,18 @@
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.4.13</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-codec-http</artifactId>
+            <version>4.1.86.Final</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 

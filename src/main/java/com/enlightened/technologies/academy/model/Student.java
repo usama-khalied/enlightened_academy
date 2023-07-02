@@ -33,16 +33,16 @@ public class Student implements Serializable {
     @Column(name = "id", length = 50)
     private String id;
 
-    @Column(name = "first_name", length = 500)
+    @Column(name = "firstname", length = 500)
     private String firstName;
 
-    @Column(name = "last_name", length = 500)
+    @Column(name = "lastname", length = 500)
     private String LastName;
 
     @Column(name = "email", length = 100)
     private String email;
 
-    @Column(name = "address", length = 500)
+    @Column(name = "address", length = 1000)
     private String address;
 
     @Column(name = "phone", length = 11)
@@ -60,7 +60,7 @@ public class Student implements Serializable {
     @Column(name = "cnic", length = 13)
     private String cnic;
     
-    @Column(name = "parent_cnic", length = 13)
+    @Column(name = "parentcnic", length = 13)
     private String parentCnic;
 
     @OneToMany(mappedBy = "student")
