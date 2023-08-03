@@ -14,20 +14,34 @@ import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../../shared/error-dialog/error-dialog.component';
 import { SuccessDialogComponent } from '../../shared/success-dialog/success-dialog.component';
 import { HttpResponse } from 'src/app/shared/model/HttpResponse';
-import { MatFormFieldAppearance } from '@angular/material/form-field';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-register-page',
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css'],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }],
 })
 export class RegisterPageComponent implements OnInit {
-
   studentDataForm: FormGroup;
   availableCourses: Course[] = [];
   studentId: any;
   loading: boolean = false;
   courseForm: FormGroup;
+  selectedCourses: number[] = [];
+  selectedDate: Date | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +62,7 @@ export class RegisterPageComponent implements OnInit {
       phone: ['', [Validators.required, Validators.pattern(/^0\d{10}$/)]],
       gender: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
+      qualification: ['', Validators.required],
     });
 
     this.courseForm = this.formBuilder.group({
@@ -102,6 +117,7 @@ export class RegisterPageComponent implements OnInit {
         birthDate: formValues.dateOfBirth,
         cnic: formValues.CNIC,
         parentCNIC: formValues.fathersCNIC,
+        qualification: formValues.qualification,
       };
 
       this.studentService.addStudent(studentData).subscribe({
@@ -202,6 +218,7 @@ export class RegisterPageComponent implements OnInit {
           this.errorDialog('Phone Number Already Exists', 409);
       },
       error: (error: any) => {
+        console.log(error);
         this.errorDialog('Phone Number Already Exists', 409);
         // this.studentDataForm.controls["phone"].setErrors({ incorrect: true });
         this.studentDataForm.controls['phone'].setValue(null);
@@ -212,6 +229,9 @@ export class RegisterPageComponent implements OnInit {
     this.dialog.open(ErrorDialogComponent, {
       data: { message: message, status: Status },
     });
+  }
+  getBack() {
+    this.studentService.getBack();
   }
 }
 

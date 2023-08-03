@@ -9,4 +9,5 @@ export interface Student {
     birthDate: string;
     cnic: string;
     parentCNIC: string;
+    qualification:string
 }

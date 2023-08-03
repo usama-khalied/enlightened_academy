@@ -1,11 +1,14 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core'
 import { WebRoutingModule } from './web-routing.module';
 import { CommonModule } from '@angular/common';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MdbCarouselModule } from 'mdb-angular-ui-kit/carousel';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MomentDateModule } from '@angular/material-moment-adapter';
 import {
   SocialLoginModule,
   SocialAuthServiceConfig,
@@ -26,6 +29,7 @@ import { CeoMessageComponent } from './home/ceo-message/ceo-message.component';
 import { WebComponent } from './web.component';
 import { MaterialModule } from '../shared/material/material.module';
 import { LoaderComponent } from '../shared/loader/loader.component';
+
 
 @NgModule({
   declarations: [
@@ -53,6 +57,9 @@ import { LoaderComponent } from '../shared/loader/loader.component';
     ReactiveFormsModule,
     MdbCarouselModule,
     SocialLoginModule,
+    MomentDateModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
  
   providers: [
@@ -67,9 +74,11 @@ import { LoaderComponent } from '../shared/loader/loader.component';
               '236025958894-l05tha7iovc0ool81upch4i6gi91npe8.apps.googleusercontent.com'
             ),
           },
+          { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
         ],
       } as SocialAuthServiceConfig,
     },
+
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -8,7 +8,7 @@
 }
 .registeration-ui {
 display: flex;
-justify-content: center;
+justify-content: flex-start;
 align-items: center;
 }
 .registeration-content {
@@ -44,7 +44,7 @@ height: 70vh;
 }
 .confirm-container {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 200px;
 }
@@ -87,13 +87,15 @@ height: 70vh;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
+} */
 
-.navBtn:hover {
+/* .navBtn:hover {
   background-color: #302a77;
-}
+} */
 
 .list {
+  /* display: flex !important; */
+  /* justify-content: space-between; */
   margin-bottom: 32px;
 }
 
@@ -101,11 +103,11 @@ height: 70vh;
 
 
 
-.confirmation-tile mat-card-actions {
+/* .confirmation-tile mat-card-actions {
   justify-content: center;
-}
+} */
 
-.confirmation-tile button {
+/* .confirmation-tile button {
   margin-right: 8px;
   background-color: #302a77;
   color: #fff;
@@ -114,21 +116,31 @@ height: 70vh;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
+} */
 
-.confirmation-tile button:hover {
+/* .confirmation-tile button:hover {
   background-color: #302a77;
-}
+} */
 
 .course-item {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(226, 226, 226);
+  /* margin-bottom: 12px; */
+}
+/* .course-description {
+  mar
+}
+.course-price */
+.underline {
+  width: 100%;
+  height: 1px;
+  background-color: rgb(186, 186, 186);
 }
 
 
-
-.confirm-container {
+/* .confirm-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -144,11 +156,18 @@ height: 70vh;
 
 /* Make the grid layout responsive */
 .form-row {
+  /* display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 10px;
+
 }
 
+.mat-form-field {
+  height: 80px !important;
+}
 /* Make the stepper cards responsive */
 .stepper-card {
   width: 100%;
@@ -167,6 +186,7 @@ height: 70vh;
 @media screen and (max-width: 767px) {
   .form-row {
     grid-template-columns: 1fr;
+    /* flex-direction: column; */
   }
 
   .stepper-card {
@@ -177,6 +197,10 @@ height: 70vh;
 }
 .centered-card {
   width: fit-content;
+}
+.card-action {
+  display: flex;
+  justify-content: flex-end;
 }
 
 @keyframes ripple {
@@ -200,3 +224,6 @@ mat-checkbox.mat-checkbox-checked::after {
   background-color: rgba(0, 0, 0, 0.1);
   animation: ripple 0.4s ease-out;
 }
+/* .select {
+  background-color: none !important;
+} */

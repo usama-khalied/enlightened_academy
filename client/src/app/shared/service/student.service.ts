@@ -5,12 +5,13 @@ import { catchError } from 'rxjs/operators';
 import { Student } from '../model/Student'; //Path to your Student interface
 import { HttpResponse } from '../model/HttpResponse';
 import { environment } from '../../../environments/environment';
+import { Location } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudentService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,public Location:Location) {}
 
   addStudent(student: Student): Observable<HttpResponse> {
     return this.http
@@ -43,6 +44,9 @@ export class StudentService {
     return this.http.get<any>(
       `${environment.apiUrl}students/find/?email=${email}`
     );
+  }
+  getBack(){
+  this.Location.back();
   }
 }
 interface Course {
