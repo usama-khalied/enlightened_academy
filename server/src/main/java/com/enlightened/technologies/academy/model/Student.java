@@ -63,6 +63,9 @@ public class Student implements Serializable {
     @Column(name = "parentcnic", length = 13)
     private String parentCnic;
 
+    @Column(name = "qualification", length = 50)
+    private String qualification;
+
     @OneToMany(mappedBy = "student")
     @JsonIgnore
     private List<Enrollment> enrollments;
