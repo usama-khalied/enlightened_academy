@@ -18,6 +18,7 @@ width: 300px;
 height: 70vh;
 }
 .form-container {
+  width: 100%;
   margin: 20px 0;
 } 
 .stepper-buttons {
@@ -160,11 +161,13 @@ height: 70vh;
   flex-wrap: wrap;
   justify-content: flex-start; */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, minmax(250px, 1fr));
   gap: 10px;
 
 }
-
+.address {
+  grid-column: 1 / span 3;
+}
 .mat-form-field {
   height: 80px !important;
 }
@@ -179,15 +182,40 @@ height: 70vh;
 .stepper-container {
   width: 100%;
 }
-
-/* Add more styles for responsiveness as needed */
-
-/* Media queries for small screens */
 @media screen and (max-width: 767px) {
   .form-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .address {
+    grid-column: 1 / span 1; /* This will make the address field span all available columns on smaller screens */
+  }
+}
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .form-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .address {
+    grid-column: 1 / span 2; 
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 991px)  {
+  .mat-form-field {
+    height: auto;
+  }
+  .form-row {
+    grid-template-columns: repeat(1, 1fr);
+    /* grid-template-columns: 1fr; */
+    /* grid-template-columns: repeat(auto-fit); */
+    /* grid-template-columns: repeat(3, minmax(250px, 2fr)); */
     /* flex-direction: column; */
   }
+  .address {
+    grid-column: 1 / span 1; /* This will make the address field span all available columns on smaller screens */
+  }
+  /* .form-row {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+
+  } */
 
   .stepper-card {
     max-width: 100%;
@@ -200,7 +228,7 @@ height: 70vh;
 }
 .card-action {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 @keyframes ripple {

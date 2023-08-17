@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ApiUtilsService {
     this.allCourses=[]
   }
   fetchCourses() {
-    const apiUrl = "http://localhost:8081/courses/";
+    const apiUrl = `${environment.apiUrl}courses/`;
     this.http.get(apiUrl).subscribe(
       (response: any) => {  // Define the response as any type or a specific interface if you have one.
 

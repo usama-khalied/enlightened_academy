@@ -13,7 +13,7 @@
             <form [formGroup]="studentDataForm" (submit)="submitForm()">
               <div class="list-group-item">
                 <div class="form-row">
-                  <mat-form-field  class="border-#a0ce4e" appearance="outline">
+                  <mat-form-field class="border-#a0ce4e" appearance="outline">
                     <!-- <mat-label>First Name </mat-label> -->
                     <input placeholder="First Name" matInput type="text" formControlName="firstName" required
                       name="firstName" />
@@ -28,7 +28,7 @@
                     </mat-error>
                   </mat-form-field>
 
-                  <mat-form-field  class="border-#a0ce4e" appearance="outline">
+                  <mat-form-field class="border-#a0ce4e" appearance="outline">
                     <!-- <mat-label>Last Name </mat-label> -->
                     <input placeholder="Last Name" matInput type="text" formControlName="lastName" required />
                     <mat-error *ngIf="
@@ -38,7 +38,7 @@
                       ">Last Name is required</mat-error>
                   </mat-form-field>
 
-                  <mat-form-field  appearance="outline">
+                  <mat-form-field appearance="outline">
                     <!-- <mat-label> CNIC </mat-label> -->
                     <input placeholder="CNIC" matInput type="text" formControlName="CNIC" required pattern="^\d{13}$"
                       (change)="cnicDuplicate($event)" />
@@ -50,7 +50,7 @@
                       ">Invalid CNIC (must be 13 digits)</mat-error>
                   </mat-form-field>
 
-                  <mat-form-field  appearance="outline">
+                  <mat-form-field appearance="outline">
                     <!-- <mat-label> Father's CNIC </mat-label> -->
                     <input placeholder="Father's CNIC " matInput type="text" formControlName="fathersCNIC" required
                       pattern="^\d{13}$" />
@@ -66,7 +66,7 @@
                       ">Invalid Father's CNIC (must be 13 digits)</mat-error>
                   </mat-form-field>
 
-                  <mat-form-field  appearance="outline">
+                  <mat-form-field appearance="outline">
                     <!-- <mat-label> Email </mat-label> -->
                     <input matInput placeholder="Email" type="email" formControlName="email" required
                       (change)="emailDuplicate($event)" />
@@ -78,7 +78,7 @@
                       ">Invalid email</mat-error>
                   </mat-form-field>
 
-                  <mat-form-field  appearance="outline">
+                  <mat-form-field appearance="outline">
                     <!-- <mat-label> Phone Number </mat-label> -->
                     <input matInput placeholder="Phone Number" type="tel" formControlName="phone" required
                       pattern="^0\d{10}$" (change)="phoneDuplicate($event)" />
@@ -99,7 +99,7 @@
                         )
                       ">Date of Birth is required</mat-error>
                   </mat-form-field> -->
-                  <mat-form-field  appearance="outline">
+                  <mat-form-field appearance="outline">
                     <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" placeholder="Date of Birth">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
@@ -134,63 +134,48 @@
                         studentDataForm.controls['gender'].hasError('required')
                       ">Gender is required</mat-error>
                   </mat-form-field>
-
-                  <!-- <fieldset>
-                    <legend>
-                        <label style="font-size: 20px;" [attr.for]="'gender'">Gender</label>
-                    </legend>
-                    <div class="row">
-                        <mat-radio-group formControlName="gender" aria-label="Select an option">
-                            <mat-radio-button color="primary" value="M">Male</mat-radio-button>
-                            <mat-radio-button color="primary" value="F">Female</mat-radio-button>
-                        </mat-radio-group>
-                    </div>
-                </fieldset>    -->
-                  <!-- <mat-label>Gender</mat-label> -->
-                  <!-- <mat-radio-group formControlName="gender">
-                  
-                    <mat-radio-button color="primary" value="M"
-                      >Male</mat-radio-button
-                    >
-                    <mat-radio-button color="primary" value="F"
-                      >Female</mat-radio-button
-                    >
-                  </mat-radio-group> -->
-                  <mat-form-field style="height: 100px;" appearance="outline">
-                    <textarea matInput placeholder="Address" type="text" formControlName="address" required>
-                    </textarea>
+                  <mat-form-field class="address"  appearance="outline">
+                    <input matInput placeholder="Address" type="text" formControlName="address" required />
                     <mat-error *ngIf="
                         studentDataForm.controls['address'].hasError('required')
                       ">Address is required</mat-error>
                   </mat-form-field>
                 </div>
-           
+
               </div>
             </form>
           </div>
           <!-- <button mat-button matStepperNext class="navBtn">Next</button> -->
           <div class="card-action space-x-2">
-          <button (click)="this.getBack()" class="rounded-full rounded-full custom-btn">
-            Back to Home
-          </button>
-          <button matStepperNext class="rounded-full rounded-full custom-btn">
-            Next
-          </button>
-        </div>
+            <!-- <button (click)="this.getBack()" class="rounded-full rounded-full custom-btn">
+              <i class="fa fa-long-arrow-left" aria-hidden="true"></i>  Back to Home
+            </button> -->
+            <button (click)="this.VoucherService.runReport('Enlightened Academy')"
+              class="rounded-full rounded-full custom-btn">
+              Run Report
+            </button>
+            <button matStepperNext class="rounded-full rounded-full custom-btn">
+              Next
+            </button>
+          </div>
           <!-- <button (click)="resetCNIC()">Reset CNIC</button> -->
         </mat-step>
         <mat-step label="Course Registration" [stepControl]="courseForm">
+          <div class="course-item">
+            <p class="fw-bold">Courses</p>
+            <p class="fw-bold">Price</p>
+          </div>
           <div class="list">
             <div *ngFor="let course of availableCourses" class="course-item">
-              
+  
               <mat-checkbox color="primary" [(ngModel)]="course.checked" class="checkbox"
                 (change)="updateCourseSelection()">
+
                 {{ course?.name }}
               </mat-checkbox>
-              <p class="course-description">{{course?.description}}</p>
-
+         
               <p class="course-price">Rs.{{ course?.fee}}</p>
-        
+
             </div>
             <div class="underline"></div>
             <mat-error *ngIf="!isCourseSelected()">Please select at least one course</mat-error>
@@ -200,8 +185,9 @@
             <button matStepperPrevious class="rounded-full rounded-full custom-btn mx-0.5">
               Back
             </button>
-            <button matStepperNext [disabled]="!isCourseSelected()" class="rounded-full rounded-full custom-btn">
-              Next
+            <button matStepperNext [disabled]="!isCourseSelected()" (click)="onSubmit()"
+              class="rounded-full rounded-full custom-btn">
+              Confirm
             </button>
             <!-- <button
               mat-button
@@ -213,13 +199,13 @@
           </div>
         </mat-step>
 
-        <mat-step>
+        <!-- <mat-step>
           <ng-template matStepLabel> Confirm </ng-template>
           <div class="confirm-container">
             <div class="centered-card">
               <mat-card class="confirmation-tile">
                 <mat-card-title>
-                  Are you sure you want to proceed with the Registration?
+                  Are you sure you want to proceed with the Registration ?
                 </mat-card-title>
                 <mat-card-actions>
                   <button (click)="postEnrollment()" class="rounded-full rounded-full custom-btn mx-1">
@@ -232,7 +218,7 @@
               </mat-card>
             </div>
           </div>
-        </mat-step>
+        </mat-step> -->
       </mat-horizontal-stepper>
     </div>
   </mat-card>

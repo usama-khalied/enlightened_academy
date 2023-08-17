@@ -29,6 +29,7 @@ import { CeoMessageComponent } from './home/ceo-message/ceo-message.component';
 import { WebComponent } from './web.component';
 import { MaterialModule } from '../shared/material/material.module';
 import { LoaderComponent } from '../shared/loader/loader.component';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { LoaderComponent } from '../shared/loader/loader.component';
     FooterComponent,
     CeoMessageComponent,
     WebComponent,
+    ConfirmDialogComponent
   ],
 
   imports: [
@@ -80,6 +82,7 @@ import { LoaderComponent } from '../shared/loader/loader.component';
     },
 
   ],
+
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class WebModule {}

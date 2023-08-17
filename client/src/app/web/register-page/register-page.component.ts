@@ -15,6 +15,8 @@ import { ErrorDialogComponent } from '../../shared/error-dialog/error-dialog.com
 import { SuccessDialogComponent } from '../../shared/success-dialog/success-dialog.component';
 import { HttpResponse } from 'src/app/shared/model/HttpResponse';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { VoucherService } from 'src/app/shared/service/voucher.service';
+import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -49,7 +51,8 @@ export class RegisterPageComponent implements OnInit {
     private studentService: StudentService,
     private enrollmentService: EnrollementService,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public VoucherService: VoucherService
   ) {
     this.availableCourses = [];
     this.studentDataForm = this.formBuilder.group({
@@ -232,6 +235,24 @@ export class RegisterPageComponent implements OnInit {
   }
   getBack() {
     this.studentService.getBack();
+  }
+  onSubmit() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      height: '200px',
+      data: {
+        message: 'Are you sure you want to proceed with the Registration ?',
+        buttonText: {
+          ok: 'Yes',
+          cancel: 'No'
+        }
+      }
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+          this.postEnrollment();
+      }
+    });
   }
 }
 
