@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Directive, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -17,6 +17,8 @@ import { HttpResponse } from 'src/app/shared/model/HttpResponse';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { VoucherService } from 'src/app/shared/service/voucher.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { InputMaskDirective } from '../../shared/directives/Masking.directive';
+import { Observable } from 'rxjs';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -146,6 +148,7 @@ export class RegisterPageComponent implements OnInit {
       CNIC: ['', [Validators.required, Validators.pattern(/^\d{13}$/)]],
     });
   }
+
   async postEnrollment(): Promise<void> {
     try {
       await this.postStudent();
@@ -185,49 +188,6 @@ export class RegisterPageComponent implements OnInit {
     return this.availableCourses.some((course) => course.checked);
   }
 
-  cnicDuplicate(cnic: any) {
-    let CnicNumber = cnic.target.value;
-    this.studentService.studentCnicCheck(CnicNumber).subscribe({
-      next: (res: HttpResponse) => {
-        if (res.status === 409) {
-          this.errorDialog('Cnic Already Exists', 409);
-        }
-      },
-      error: (error: any) => {
-        this.errorDialog('Cnic Already Exists', 409);
-        this.studentDataForm.controls['CNIC'].setValue(null);
-      },
-    });
-  }
-  emailDuplicate(email: any) {
-    let emailAddress = email.target.value;
-    this.studentService.studentEmailCheck(emailAddress).subscribe({
-      next: (res: HttpResponse) => {
-        if (res.status === 409) {
-          this.errorDialog('Email Already Exists', 409);
-        }
-      },
-      error: (error: any) => {
-        this.errorDialog('Email Already Exists', 409);
-        this.studentDataForm.controls['email'].setValue(null);
-      },
-    });
-  }
-  phoneDuplicate(phone: any) {
-    let phoneNumber = phone.target.value;
-    this.studentService.studentPhoneNocheck(phoneNumber).subscribe({
-      next: (res: HttpResponse) => {
-        if (res.status === 409)
-          this.errorDialog('Phone Number Already Exists', 409);
-      },
-      error: (error: any) => {
-        console.log(error);
-        this.errorDialog('Phone Number Already Exists', 409);
-        // this.studentDataForm.controls["phone"].setErrors({ incorrect: true });
-        this.studentDataForm.controls['phone'].setValue(null);
-      },
-    });
-  }
   errorDialog(message: string, Status: number) {
     this.dialog.open(ErrorDialogComponent, {
       data: { message: message, status: Status },
@@ -244,16 +204,69 @@ export class RegisterPageComponent implements OnInit {
         message: 'Are you sure you want to proceed with the Registration ?',
         buttonText: {
           ok: 'Yes',
-          cancel: 'No'
-        }
-      }
+          cancel: 'No',
+        },
+      },
     });
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
-          this.postEnrollment();
+        this.postEnrollment();
       }
     });
   }
+
+  isExisting(value: any, type: string) {
+    let errorMessage = '';
+    if (type === 'email') {
+      errorMessage = 'Email Already Exists';
+    } else if (type === 'phone') {
+      errorMessage = 'Phone Number Already Exists';
+    } else if (type === 'cnic') {
+      errorMessage = 'Cnic Already Exists';
+    }
+
+    this.checkIfExistsAndHandleError(value.target.value, type, errorMessage);
+  }
+  private checkIfExistsAndHandleError(
+    value: any,
+    type: string,
+    errorMessage: string
+  ): void {
+    let checkObservable: Observable<HttpResponse>;
+
+    switch (type) {
+      case 'email':
+        checkObservable = this.studentService.studentEmailCheck(value);
+        break;
+      case 'phone':
+        checkObservable = this.studentService.studentPhoneNocheck(value);
+        break;
+      case 'cnic':
+        checkObservable = this.studentService.studentCnicCheck(value);
+        break;
+      default:
+        return;
+    }
+
+    checkObservable.subscribe({
+      next: (res: HttpResponse) => {
+        if (res.status === 409) {
+          this.errorDialog(errorMessage, 409);
+        }
+      },
+      error: (error: any) => {
+        this.errorDialog(errorMessage, 409);
+        if (type === 'email') {
+          this.studentDataForm.controls['email'].setValue(null);
+        } else if (type === 'phone') {
+          this.studentDataForm.controls['phone'].setValue(null);
+        } else if (type === 'cnic') {
+          this.studentDataForm.controls['CNIC'].setValue(null);
+        }
+      },
+    });
+  }
+
 }
 
 interface Course {
