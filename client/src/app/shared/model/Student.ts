@@ -10,6 +10,7 @@ export interface Student {
     cnic: string;
     parentCNIC: string;
     qualification:string
+    enrollments?:string[] | number[] 
 
 }
 export class StudentRegisterationSlip {
