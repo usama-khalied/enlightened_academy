@@ -11,6 +11,7 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -18,17 +19,18 @@ body {
 }
 
 .heading-row {
-margin: 2rem 0;
-display: flex;
-justify-content: center;
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
 }
+
 .mat-mdc-text-field-wrapper {
-  height:60px !important;
+  height: 60px !important;
 
 }
 
 @media only screen and (max-width: 720px) {
-    .heading {
-      font-size: 26px;
-    }
+  .heading {
+    font-size: 26px;
+  }
 }
