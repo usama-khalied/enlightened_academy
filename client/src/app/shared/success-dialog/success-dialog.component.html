@@ -1,12 +1,11 @@
-
 <div [@dialog] class="dialog">
   <h1>Success!</h1>
   <p>Message: {{ data.message }} <span *ngIf="data?.downloadPdf">Please download the voucher</span></p>
-  <button *ngIf="data?.downloadPdf" (click)="this.voucherService.runReport('Enlightened Academy')"
-    class="rounded-full rounded-full custom-btn mx-0.5">
+  <button *ngIf="data?.downloadPdf" (click)="generatePdf()" mat-dialog-close
+    class="rounded-full rounded-full custom-btn mx-0.5" [routerLink]="['../home']">
     {{data.downloadPdf}} <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
   </button>
-  <button *ngIf="!data?.downloadPdf" (click)="closeDialog()" class="rounded-full rounded-full custom-btn mx-0.5">
+  <button *ngIf="!data?.downloadPdf" mat-dialog-close class="rounded-full rounded-full custom-btn mx-0.5">
     Close
   </button>
 </div>
