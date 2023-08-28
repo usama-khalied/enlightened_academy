@@ -8,6 +8,37 @@ const customPageSize: any = {
   width: 795,
   height: 442,
 };
+function numberToWords(number: number): string {
+  const ones: string[] = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+  const teens: string[] = ["", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+  const tens: string[] = ["", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+
+
+  function convertToWords(n: number): string {
+    if (n < 10) {
+      return ones[n];
+    } else if (n >= 11 && n <= 19) {
+      return teens[n - 10];
+    } else if (n >= 20 && n < 100) {
+      const tenDigit = Math.floor(n / 10);
+      const oneDigit = n % 10;
+      return tens[tenDigit] + (oneDigit !== 0 ? "-" + ones[oneDigit] : "");
+    }
+    return "";
+  }
+
+  if (number === 0) {
+    return "zero";
+  } else if (number < 100) {
+    return convertToWords(number);
+  } else if (number >= 1000 && number < 1000000) {
+    const thousand = Math.floor(number / 1000);
+    const remainder = number % 1000;
+    return convertToWords(thousand) + " thousand" + (remainder !== 0 ? " " + convertToWords(remainder) : "");
+  }
+  return "";
+}
 
 
 @Injectable({
@@ -15,23 +46,22 @@ const customPageSize: any = {
 })
 
 export class VoucherService {
-  // studentDataForRegisterationSlip : StudentRegisterationSlip; 
+  totalFee: number = 0;
+  data: Data[] = [{ course: '.NET', fee: 2000 }, { course: 'JAVA', fee: 2000 }];
   constructor() {
-    // this.studentDataForRegisterationSlip = new StudentRegisterationSlip(
-    //   0,
-    //   '',
-    //   '',
-    //   '',
-    //   '',
-    //   '',
-    //   '',
-    //   '',
-    //   '',
-    //   '',
-    //   ''
-    // );
+    this.calculateTotalFee();
   }
 
+  ngOnInit() {
+  }
+
+  calculateTotalFee() {
+    this.data.forEach((p) => {
+      if (p.fee) {
+        this.totalFee += p.fee;
+      }
+    });
+  }
   formatDate(date: Date) {
     var d = new Date(date),
       month = '' + (d.getMonth() + 1),
@@ -46,30 +76,16 @@ export class VoucherService {
     return [day, month, year].join('/');
   }
   async generatePDF(action = 'open', OpenType: any) {
-    // var RfqReference = this.rfqMasterService.formData.RfqReference;
-    // var ContractName = this.rfqMasterService.formData.ContractName;
-    var SubTotal = '';
     if (OpenType == 'Qvise') {
-      // SubTotal = this.RfqItemsService.rfqItemsList[0].QviseSubTotal;
+
     }
     else {
-      // SubTotal = this.RfqItemsService.rfqItemsList[0].ProviderSubTotal;
     }
 
-    // var CountryName = this.RfqItemsService.rfqItemsList[0].CountryName;
-    var CountryName = 'Pakistan'
-    var ModeShipDesc = 'Karachi Pakistan Limited';
-    var Validaty = 'Type';
-    var DeliveryTime = '12/4/122';
-
-    var ShipmentCharges = (Math.round(40 * 100) / 100).toFixed(2);
     var GrandTotal = 0.90;
-    var QotationNumber = 123;
-    var QotationRecDate = '12/08/2023';
-    var DecimalGrandTotal = (Math.round(GrandTotal * 100) / 100).toFixed(2);
+
 
     let docDefinition: any = {
-      // pageSize: customPageSize,
       content: [
         {
 
@@ -80,11 +96,11 @@ export class VoucherService {
                 {
                   stack: [
                     {
-                      border: [true, true, true, true],
                       image: await this.getBase64ImageFromURL("../../../assets/logo.png"),
                       width: 30,
                       height: 30,
                       alignment: 'center',
+                      margin: [0, 5, 0, 0],
                     },
                     {
                       text: `${OpenType} `,
@@ -134,64 +150,89 @@ export class VoucherService {
                       canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
                       margin: [0, 2, 0, 0],
                     },
-                      // Student Information
-                      {
-                        text: `Student : Muhammad Usama`,
-                        fontSize: 9,
-                        margin: [0, 30, 0, 0],
-                        bold: false,
-                        alignment: 'left',
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
-                      {
-                        text: `Student ID. 02221`,
-                        fontSize: 9,
-                        bold: false,
-                        margin: [0, 2, 0, 0],
-                        alignment: 'left',
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
-                      {
-                        text: `CNIC : 442232323232`,
-                        fontSize: 9,
-                        margin: [0, 2, 0, 0],
-                        bold: false,
-                        alignment: 'left',
-                        border: [false, true, false, false],
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
-                      {
-                        text: `Phone : 031422323233`,
-                        fontSize: 9,
-                        margin: [0, 2, 0, 0],
-                        bold: false,
-                        alignment: 'left',
-                        border: [false, true, false, false],
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
+                    // Student Information
+                    {
+                      text: `Student : Muhammad Usama`,
+                      fontSize: 9,
+                      margin: [0, 30, 0, 0],
+                      bold: false,
+                      alignment: 'left',
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      text: `Student ID. 02221`,
+                      fontSize: 9,
+                      bold: false,
+                      margin: [0, 2, 0, 0],
+                      alignment: 'left',
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      text: `CNIC : 442232323232`,
+                      fontSize: 9,
+                      margin: [0, 2, 0, 0],
+                      bold: false,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      text: `Phone : 031422323233`,
+                      fontSize: 9,
+                      margin: [0, 2, 0, 0],
+                      bold: false,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      style: 'tableExample',
+                      table: {
+                        widths: ['50%', '50%'],
+                        body: [
+                          ['Courses', 'Fee'],
+                          ...this.data.map((p) => [
+                            { text: p.course, fontSize: 9, alignment: 'center' },
+                            { text: p.fee, fontSize: 9, alignment: 'center' },
+                          ]),
+                          [
+                            { text: 'Total', fontSize: 9, alignment: 'center', bold: true },
+                            { text: `${this.totalFee} /=`, fontSize: 9, alignment: 'center', bold: true },
+                          ],
+                        ]
+                      }
+                    },
+                    {
+                      text: `Amount in words: ${numberToWords(this.totalFee)} only`,
+                      fontSize: 9,
+                      margin: [0, 2, 4, 0],
+                      bold: true,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      text: `Depositor's Signature`,
+                      fontSize: 9,
+                      margin: [0, 45, 10, 0],
+                      bold: false,
+                      alignment: 'right',
+                    },
                   ],
                   margin: [10, 0],
                 },
-                // {
-                //   stack: [
-                //     {
-                //       text: '', // Empty string
-                //       margin: [0, 10], // Add margin for spacing (10 units top and bottom)
-                //     }
-                //   ]
-                // },
+
                 {
                   stack: [
                     {
@@ -199,6 +240,7 @@ export class VoucherService {
                       width: 30,
                       height: 30,
                       alignment: 'center',
+                      margin: [0, 5, 0, 0],
                     },
                     {
                       text: `${OpenType} `,
@@ -248,53 +290,85 @@ export class VoucherService {
                       canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
                       margin: [0, 2, 0, 0],
                     },
-                      // Student Information
-                      {
-                        text: `Student : Muhammad Usama`,
-                        fontSize: 9,
-                        margin: [0, 30, 0, 0],
-                        bold: false,
-                        alignment: 'left',
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
-                      {
-                        text: `Student ID. 02221`,
-                        fontSize: 9,
-                        bold: false,
-                        margin: [0, 2, 0, 0],
-                        alignment: 'left',
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
-                      {
-                        text: `CNIC : 442232323232`,
-                        fontSize: 9,
-                        margin: [0, 2, 0, 0],
-                        bold: false,
-                        alignment: 'left',
-                        border: [false, true, false, false],
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
-                      {
-                        text: `Phone : 031422323233`,
-                        fontSize: 9,
-                        margin: [0, 2, 0, 0],
-                        bold: false,
-                        alignment: 'left',
-                        border: [false, true, false, false],
-                      },
-                      {
-                        canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
-                        margin: [0, 2, 0, 0],
-                      },
+                    // Student Information
+                    {
+                      text: `Student : Muhammad Usama`,
+                      fontSize: 9,
+                      margin: [0, 30, 0, 0],
+                      bold: false,
+                      alignment: 'left',
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      text: `Student ID. 02221`,
+                      fontSize: 9,
+                      bold: false,
+                      margin: [0, 2, 0, 0],
+                      alignment: 'left',
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      text: `CNIC : 442232323232`,
+                      fontSize: 9,
+                      margin: [0, 2, 0, 0],
+                      bold: false,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      text: `Phone : 031422323233`,
+                      fontSize: 9,
+                      margin: [0, 2, 0, 0],
+                      bold: false,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
+                      margin: [0, 2, 0, 0],
+                    },
+                    {
+                      style: 'tableExample',
+                      table: {
+                        widths: ['50%', '50%'],
+                        body: [
+                          ['Courses', 'Fee'],
+                          ...this.data.map((p) => [
+                            { text: p.course, fontSize: 9, alignment: 'center' },
+                            { text: p.fee, fontSize: 9, alignment: 'center' },
+                          ]),
+                          [
+                            { text: 'Total', fontSize: 9, alignment: 'center', bold: true },
+                            { text: `${this.totalFee} /=`, fontSize: 9, alignment: 'center', bold: true },
+                          ],
+                        ]
+                      }
+                    },
+                    {
+                      text: `Amount in words: ${numberToWords(this.totalFee)} only`,
+                      fontSize: 9,
+                      margin: [0, 2, 4, 0],
+                      bold: true,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      text: `Depositor's Signature`,
+                      fontSize: 9,
+                      margin: [0, 45, 10, 0],
+                      bold: false,
+                      alignment: 'right',
+                    },
                   ],
                   margin: [10, 0],
                 },
@@ -306,6 +380,7 @@ export class VoucherService {
                       width: 30,
                       height: 30,
                       alignment: 'center',
+                      margin: [0, 5, 0, 0],
                     },
                     {
                       text: `${OpenType} `,
@@ -402,13 +477,46 @@ export class VoucherService {
                       canvas: [{ type: 'line', x1: 0, y1: 0, x2: 130, y2: 0, lineWidth: 0.5, lineColor: 'black' }],
                       margin: [0, 2, 0, 0],
                     },
+                    {
+                      style: 'tableExample',
+                      table: {
+                        widths: ['50%', '50%'],
+                        body: [
+                          ['Courses', 'Fee'],
+                          ...this.data.map((p) => [
+                            { text: p.course, fontSize: 9, alignment: 'center' },
+                            { text: p.fee, fontSize: 9, alignment: 'center' },
+                          ]),
+                          [
+                            { text: 'Total', fontSize: 9, alignment: 'center', bold: true },
+                            { text: `${this.totalFee} /=`, fontSize: 9, alignment: 'center', bold: true },
+                          ],
+                        ]
+                      }
+                    },
+                    {
+                      text: `Amount in words: ${numberToWords(this.totalFee)} only`,
+                      fontSize: 9,
+                      margin: [0, 2, 4, 0],
+                      bold: true,
+                      alignment: 'left',
+                      border: [false, true, false, false],
+                    },
+                    {
+                      text: `Depositor's Signature`,
+                      fontSize: 9,
+                      margin: [0, 45, 10, 0],
+                      bold: false,
+                      alignment: 'right',
+                    },
                   ],
                   margin: [10, 0],
                 },
+
               ],
             ],
           },
-  
+
           layout: {
             hLineWidth: function (i: any, node: any) {
               return (i === 0 || i === node.table.body.length) ? 1 : 0.5; // Reduce top and bottom border width
@@ -435,12 +543,15 @@ export class VoucherService {
               return { dash: { length: 4 } }; // Custom dashed border style for left and right
             },
           },
-        }          
+        }
       ],
       styles: {
         customTable: {
           border: 'dotted'
-        }
+        },
+        tableExample: {
+          margin: [0, 10, 0, 10]
+        },
       }
     };
 
@@ -488,5 +599,9 @@ export class VoucherService {
       img.src = url;
     });
   }
-
 }
+
+class Data {
+  course: string | undefined;
+  fee: number | undefined
+}   
