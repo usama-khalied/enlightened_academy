@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { VoucherService } from '../service/voucher.service';
 
 @Component({
   selector: 'app-success-dialog',
@@ -19,9 +20,12 @@ import { animate, style, transition, trigger } from '@angular/animations';
   ]
 })
 export class SuccessDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string }, private dialogRef: MatDialogRef<SuccessDialogComponent>) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { message: string ,downloadPdf?:string},
+  public voucherService:VoucherService,
+  private dialogRef: MatDialogRef<SuccessDialogComponent>) {}
 
   closeDialog() {
     this.dialogRef.close();
   }
+
 }
