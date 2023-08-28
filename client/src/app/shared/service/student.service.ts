@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Student } from '../model/Student'; //Path to your Student interface
+import { Student } from '../model/Student';
 import { HttpResponse } from '../model/HttpResponse';
 import { environment } from '../../../environments/environment';
 import { Location } from '@angular/common';
@@ -13,8 +13,8 @@ import { Location } from '@angular/common';
 export class StudentService {
   selectedCourse!: any[];
   allCourses!: any[];
-  
-  constructor(private http: HttpClient,public Location:Location) {
+
+  constructor(private http: HttpClient, public Location: Location) {
     this.selectedCourse = []
     this.allCourses = []
   }
@@ -24,7 +24,7 @@ export class StudentService {
       .post<HttpResponse>(`${environment?.apiUrl}students/`, student)
       .pipe(catchError(this.handleError));
   }
-//   Error Handling
+  //   Error Handling
   private handleError(error: any) {
     console.error('Something went wrong', error);
     return throwError(error);
@@ -33,26 +33,15 @@ export class StudentService {
   getCourses(): Observable<any> {
     return this.http.get<any>(`${environment?.apiUrl}courses/`);
   }
-  //   Student Cnic Check
-  studentCnicCheck(cnicnNo: number):Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiUrl}students/find/?cnic=${cnicnNo}`
-    );
+  // Check Student Exist or  not through Cnic, Email & Phone Number
+  studentCheck(value: number | string, type: 'cnic' | 'phoneNumber' | 'email'): Observable<any> {
+    const params = new HttpParams().set(type, value.toString());
+    const apiUrl = `${environment.apiUrl}students/find/`;
+
+    return this.http.get<any>(apiUrl, { params });
   }
-  //   Student Phone No. Check
-  studentPhoneNocheck(phoneNumber: number):Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiUrl}students/find/?phoneNumber=${phoneNumber}`
-    );
-  }
-  // Student Email check
-  studentEmailCheck(email: string) :Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiUrl}students/find/?email=${email}`
-    );
-  }
-  getBack(){
-  this.Location.back();
+  getBack() {
+    this.Location.back();
   }
 
 }
