@@ -11,7 +11,13 @@ import { Location } from '@angular/common';
   providedIn: 'root',
 })
 export class StudentService {
-  constructor(private http: HttpClient,public Location:Location) {}
+  selectedCourse!: any[];
+  allCourses!: any[];
+  
+  constructor(private http: HttpClient,public Location:Location) {
+    this.selectedCourse = []
+    this.allCourses = []
+  }
 
   addStudent(student: Student): Observable<HttpResponse> {
     return this.http
@@ -48,6 +54,7 @@ export class StudentService {
   getBack(){
   this.Location.back();
   }
+
 }
 interface Course {
   id: string;
