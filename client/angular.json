@@ -16,7 +16,9 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
+          
           "options": {
+            "allowedCommonJsDependencies": ["moment","pdfmake"],
             "styles": [
               "src/styles.css",
               "node_modules/tailwindcss/dist/tailwind.css"
