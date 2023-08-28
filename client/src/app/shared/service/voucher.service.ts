@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import * as pdfMake from 'pdfmake/build/pdfmake'
 import * as pdfFonts from 'pdfmake/build/vfs_fonts'
+import { environment } from '../../../environments/environment';
 import { Student, StudentRegisterationSlip } from '../model/Student';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '../model/HttpResponse';
+import { Enrollment } from '../model/Enrollment';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 const customPageSize: any = {
@@ -47,20 +52,25 @@ function numberToWords(number: number): string {
 
 export class VoucherService {
   totalFee: number = 0;
-  data: Data[] = [{ course: '.NET', fee: 2000 }, { course: 'JAVA', fee: 2000 }];
-  constructor() {
-    this.calculateTotalFee();
+  student: Student[] = [];
+  courseList:  Enrollment[] | undefined = [];
+  constructor(private http: HttpClient) {
+
+    
   }
 
   ngOnInit() {
   }
 
   calculateTotalFee() {
-    this.data.forEach((p) => {
-      if (p.fee) {
-        this.totalFee += p.fee;
-      }
-    });
+    if (this.courseList) {
+      this.courseList.forEach((enrollment) => {
+        if (enrollment.course && enrollment.course.fee !== undefined) {
+          this.totalFee += enrollment.course.fee;
+        }
+      });
+    }
+  
   }
   formatDate(date: Date) {
     var d = new Date(date),
@@ -76,15 +86,6 @@ export class VoucherService {
     return [day, month, year].join('/');
   }
   async generatePDF(action = 'open', OpenType: any) {
-    if (OpenType == 'Qvise') {
-
-    }
-    else {
-    }
-
-    var GrandTotal = 0.90;
-
-
     let docDefinition: any = {
       content: [
         {
@@ -152,7 +153,7 @@ export class VoucherService {
                     },
                     // Student Information
                     {
-                      text: `Student : Muhammad Usama`,
+                      text: `Student :${this.student[0]?.firstName}`,
                       fontSize: 9,
                       margin: [0, 30, 0, 0],
                       bold: false,
@@ -174,7 +175,7 @@ export class VoucherService {
                       margin: [0, 2, 0, 0],
                     },
                     {
-                      text: `CNIC : 442232323232`,
+                      text: `CNIC : ${this.student[0]?.cnic}`,
                       fontSize: 9,
                       margin: [0, 2, 0, 0],
                       bold: false,
@@ -186,7 +187,7 @@ export class VoucherService {
                       margin: [0, 2, 0, 0],
                     },
                     {
-                      text: `Phone : 031422323233`,
+                      text: `Phone : ${this.student[0]?.phoneNumber}`,
                       fontSize: 9,
                       margin: [0, 2, 0, 0],
                       bold: false,
@@ -203,9 +204,9 @@ export class VoucherService {
                         widths: ['50%', '50%'],
                         body: [
                           ['Courses', 'Fee'],
-                          ...this.data.map((p) => [
-                            { text: p.course, fontSize: 9, alignment: 'center' },
-                            { text: p.fee, fontSize: 9, alignment: 'center' },
+                          ...(this.courseList || []).map((enrollment) => [
+                            { text: enrollment.course.name, fontSize: 9, alignment: 'center' },
+                            { text: enrollment.course.fee, fontSize: 9, alignment: 'center' },
                           ]),
                           [
                             { text: 'Total', fontSize: 9, alignment: 'center', bold: true },
@@ -292,7 +293,7 @@ export class VoucherService {
                     },
                     // Student Information
                     {
-                      text: `Student : Muhammad Usama`,
+                      text: `Student :${this.student[0]?.firstName}`,
                       fontSize: 9,
                       margin: [0, 30, 0, 0],
                       bold: false,
@@ -314,7 +315,7 @@ export class VoucherService {
                       margin: [0, 2, 0, 0],
                     },
                     {
-                      text: `CNIC : 442232323232`,
+                      text: `CNIC : ${this.student[0]?.cnic}`,
                       fontSize: 9,
                       margin: [0, 2, 0, 0],
                       bold: false,
@@ -326,7 +327,7 @@ export class VoucherService {
                       margin: [0, 2, 0, 0],
                     },
                     {
-                      text: `Phone : 031422323233`,
+                      text: `Phone : ${this.student[0]?.phoneNumber}`,
                       fontSize: 9,
                       margin: [0, 2, 0, 0],
                       bold: false,
@@ -343,9 +344,9 @@ export class VoucherService {
                         widths: ['50%', '50%'],
                         body: [
                           ['Courses', 'Fee'],
-                          ...this.data.map((p) => [
-                            { text: p.course, fontSize: 9, alignment: 'center' },
-                            { text: p.fee, fontSize: 9, alignment: 'center' },
+                          ...(this.courseList || []).map((enrollment) => [
+                            { text: enrollment.course.name, fontSize: 9, alignment: 'center' },
+                            { text: enrollment.course.fee, fontSize: 9, alignment: 'center' },
                           ]),
                           [
                             { text: 'Total', fontSize: 9, alignment: 'center', bold: true },
@@ -432,7 +433,7 @@ export class VoucherService {
                     },
                     // Student Information
                     {
-                      text: `Student : Muhammad Usama`,
+                      text: `Student :${this.student[0]?.firstName}`,
                       fontSize: 9,
                       margin: [0, 30, 0, 0],
                       bold: false,
@@ -454,7 +455,7 @@ export class VoucherService {
                       margin: [0, 2, 0, 0],
                     },
                     {
-                      text: `CNIC : 442232323232`,
+                      text: `CNIC : ${this.student[0]?.cnic}`,
                       fontSize: 9,
                       margin: [0, 2, 0, 0],
                       bold: false,
@@ -466,7 +467,7 @@ export class VoucherService {
                       margin: [0, 2, 0, 0],
                     },
                     {
-                      text: `Phone : 031422323233`,
+                      text: `Phone : ${this.student[0]?.phoneNumber}`,
                       fontSize: 9,
                       margin: [0, 2, 0, 0],
                       bold: false,
@@ -483,9 +484,9 @@ export class VoucherService {
                         widths: ['50%', '50%'],
                         body: [
                           ['Courses', 'Fee'],
-                          ...this.data.map((p) => [
-                            { text: p.course, fontSize: 9, alignment: 'center' },
-                            { text: p.fee, fontSize: 9, alignment: 'center' },
+                          ...(this.courseList || []).map((enrollment) => [
+                            { text: enrollment.course.name, fontSize: 9, alignment: 'center' },
+                            { text: enrollment.course.fee, fontSize: 9, alignment: 'center' },
                           ]),
                           [
                             { text: 'Total', fontSize: 9, alignment: 'center', bold: true },
@@ -599,9 +600,13 @@ export class VoucherService {
       img.src = url;
     });
   }
+  getStudentAndCourseListById(id: any): Observable<HttpResponse> {
+    return this.http.get<HttpResponse>(`${environment.apiUrl}students/${id}`)
+  }
 }
 
-class Data {
-  course: string | undefined;
-  fee: number | undefined
-}   
+interface Course1 {
+  id: string;
+  name: string;
+  fee: number;
+} 
