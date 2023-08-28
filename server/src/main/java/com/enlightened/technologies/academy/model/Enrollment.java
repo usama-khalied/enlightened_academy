@@ -14,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,9 +33,12 @@ public class Enrollment implements Serializable{
     @Column(name = "id", length = 100)
     private String id;
 
+
     @ManyToOne
     @JoinColumn(name = "student_id", referencedColumnName = "id")
+    @JsonBackReference
     private Student student;
+
 
     @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id", referencedColumnName = "id")
