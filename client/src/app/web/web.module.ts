@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core'
+import {  MAT_DATE_LOCALE } from '@angular/material/core'
 import { WebRoutingModule } from './web-routing.module';
 import { CommonModule } from '@angular/common';
 
@@ -32,6 +32,7 @@ import { LoaderComponent } from '../shared/loader/loader.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 
 
+
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -49,6 +50,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     CeoMessageComponent,
     WebComponent,
     ConfirmDialogComponent
+    
   ],
 
   imports: [
@@ -62,6 +64,7 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     MomentDateModule,
     MatDatepickerModule,
     MatNativeDateModule,
+
   ],
  
   providers: [
