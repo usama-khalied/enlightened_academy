@@ -20,18 +20,6 @@ export class CoursesInformationComponent {
     }
   }
   fetchCourses(): void {
-    // const apiUrl = 'http://localhost:8081/courses/';
-    // this.http.get<any>(apiUrl).subscribe(
-    //   (response) => {
-    //     this.selectedCourses = response.data.map((course: any) => ({
-    //       ...course,
-    //       checked: false,
-    //     }));
-    //   },
-    //   (error) => {
-    //     console.error('Failed to fetch courses:', error);
-    //   }
-    // );
     this.loading = true;
     this.studentService.getCourses().subscribe({
       next: (response) => {
