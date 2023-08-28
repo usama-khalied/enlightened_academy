@@ -1,5 +1,6 @@
-import { Component,Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ApiUtilsService } from '../../api-utils.service';
+import { StudentService } from 'src/app/shared/service/student.service';
 
 
 @Component({
@@ -8,22 +9,21 @@ import { ApiUtilsService } from '../../api-utils.service';
   styleUrls: ['./avaialable-courses.component.css']
 })
 export class AvaialableCoursesComponent {
-  @Input() id :any;
+  @Input() id: any;
   isChecked: boolean = false;
-  constructor(private apiUtil:ApiUtilsService){
-  
+  constructor(private apiUtil: ApiUtilsService, private studentService: StudentService) {
+
   }
 
-  checked(){
-    if(this.isChecked){
-      this.apiUtil.selectedCourse.push(this.id);
-
+  checked() {
+    if (this.isChecked) {
+      this.studentService.selectedCourse.push(this.id);
     }
     else {
-      this.apiUtil.selectedCourse = this.apiUtil.selectedCourse.filter(item => item !== this.id);
+      this.studentService.selectedCourse = this.studentService.selectedCourse.filter(item => item !== this.id);
 
     }
   }
-  
+
 
 }
