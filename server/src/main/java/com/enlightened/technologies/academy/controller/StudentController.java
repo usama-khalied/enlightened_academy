@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.UUID;
+import java.util.Optional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -154,6 +157,19 @@ public class StudentController {
         //Set and Send Response
         response.setStatus(HttpStatus.OK);
         response.setData(students);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+    @GetMapping(path = {"/{studentId}"}, name = "get-student-by-id", produces = "application/json")
+    public ResponseEntity<HttpResponse> getStudent(HttpServletRequest request, @PathVariable UUID studentId) {
+        String logPrefix = request.getRequestURI();
+        HttpResponse response = new HttpResponse(logPrefix);
+        Optional<Student> studentOptional = studentRepository.findById(String.valueOf(studentId));
+        if (studentOptional.isEmpty()) {
+            return buildErrorResponse(response, logPrefix, "Student Record not Found", HttpStatus.NOT_FOUND);
+        }
+        Student student = studentOptional.get();
+        response.setStatus(HttpStatus.OK);
+        response.setData(student);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
