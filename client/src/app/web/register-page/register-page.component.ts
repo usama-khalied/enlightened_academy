@@ -17,7 +17,6 @@ import { HttpResponse } from 'src/app/shared/model/HttpResponse';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { VoucherService } from 'src/app/shared/service/voucher.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
-import { InputMaskDirective } from '../../shared/directives/Masking.directive';
 import { Observable } from 'rxjs';
 
 export const MY_DATE_FORMATS = {
@@ -54,7 +53,7 @@ export class RegisterPageComponent implements OnInit {
     private enrollmentService: EnrollementService,
     private router: Router,
     private dialog: MatDialog,
-    public VoucherService: VoucherService
+    public voucherService: VoucherService
   ) {
     this.availableCourses = [];
     this.studentDataForm = this.formBuilder.group({
@@ -94,12 +93,6 @@ export class RegisterPageComponent implements OnInit {
   }
 
   submitForm(): void {
-    // if (this.studentDataForm.valid) {
-    //   console.log('Form submitted:', this.studentDataForm.value);
-    // } else {
-    //   console.log('Invalid entries in form');
-    // }
-    // Handle form submission logic here
   }
 
   updateCourseSelection(): void {
@@ -111,7 +104,6 @@ export class RegisterPageComponent implements OnInit {
   async postStudent(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const formValues = this.studentDataForm.value;
-
       const studentData: Student = {
         firstName: formValues.firstName,
         lastName: formValues.lastName,
@@ -124,7 +116,6 @@ export class RegisterPageComponent implements OnInit {
         parentCNIC: formValues.fathersCNIC,
         qualification: formValues.qualification,
       };
-
       this.studentService.addStudent(studentData).subscribe({
         next: (response) => {
           console.log('Success!', response),
@@ -164,24 +155,30 @@ export class RegisterPageComponent implements OnInit {
 
     this.enrollmentService.enrollStudent(this.studentId, requestBody).subscribe(
       (response) => {
-        // console.log('Success!', response);
-        this.dialog.open(SuccessDialogComponent, {
+        const dialogRef = this.dialog.open(SuccessDialogComponent, {
           data: {
             message: 'Registration successful! You will hear from us soon!',
-          },
+            downloadPdf: 'Download PDF'
+          }
         });
-        this.router.navigate(['/']); // navigate to home page
+    
+        dialogRef.afterClosed().subscribe(async (result: boolean) => {
+          if (result) {
+            this.router.navigate(['register']);
+          }
+        });
       },
       (error) => {
-        // console.error('Error!', error);
         const errorMessage =
-          error.error?.error || 'An unexpected error occurred.'; // Use the server's error message if available
+          error.error?.error || 'An unexpected error occurred.';
         this.dialog.open(ErrorDialogComponent, {
-          data: { message: errorMessage },
+          data: { message: errorMessage }
         });
         this.router.navigate(['register']);
       }
     );
+    
+    
   }
 
   isCourseSelected(): boolean {
@@ -211,6 +208,7 @@ export class RegisterPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.postEnrollment();
+        // this.VoucherService.runReport('Enlightened Academy');
       }
     });
   }
@@ -266,7 +264,14 @@ export class RegisterPageComponent implements OnInit {
       },
     });
   }
-
+  opener():void {
+    const dialogRef = this.dialog.open(SuccessDialogComponent, {
+      data: {
+        message: 'Registration successful! You will hear from us soon!',
+        downloadPdf: 'Download PDF'
+      }
+    });
+  }
 }
 
 interface Course {
