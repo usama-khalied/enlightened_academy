@@ -133,6 +133,7 @@ public class EnrollmentController {
         response.setData(enrollment);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
+
     private ResponseEntity<HttpResponse> buildErrorResponse(HttpResponse response, String logPrefix, String errorMessage, HttpStatus httpStatus) {
         Logger.application.info(Logger.pattern, AcademyApplication.VERSION, logPrefix, errorMessage);
         response.setStatus(httpStatus);
@@ -140,12 +141,8 @@ public class EnrollmentController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-
-
-
-
-@GetMapping(path = {"/{studentId}/"}, name = "enrollment-get-by-id", produces = "application/json")
-    public ResponseEntity<HttpResponse> getEnrollmentsByStudentId(HttpServletRequest request,@PathVariable String studentId) {
+    @GetMapping(path = {"/{studentId}/"}, name = "enrollment-get-by-id", produces = "application/json")
+    public ResponseEntity<HttpResponse> getEnrollmentsByStudentId(HttpServletRequest request, @PathVariable String studentId) {
 
         String logPrefix = request.getRequestURI();
         HttpResponse response = new HttpResponse(request.getRequestURI());
@@ -159,11 +156,11 @@ public class EnrollmentController {
             response.setError("Student Not Found");
             return ResponseEntity.status(response.getStatus()).body(response);
         }
-    
+
         List<Enrollment> enrollments = enrollmentRepository.findByStudentId(optionalStudent.get().getId());
         List<EnrollmentList> smallList = new ArrayList<>();
 
-        for(Enrollment enrollment: enrollments){ 
+        for (Enrollment enrollment : enrollments) {
             EnrollmentList obj = new EnrollmentList();
             Optional<Course> objCourse = courseRepository.findById(enrollment.getCourse().getId());
             obj.setStudent(optionalStudent.get());
