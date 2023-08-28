@@ -74,10 +74,8 @@
                   </mat-form-field>
 
                   <mat-form-field appearance="outline">
-                    <!-- <mat-label> Phone Number </mat-label> -->
                     <input matInput placeholder="Phone Number" type="tel" formControlName="phone" [maxLength]="11"
-                      required pattern="^0\d{10}$" (change)="isExisting($event,'phone')" />
-                    <!-- (change)="phoneDuplicate($event)" -->
+                      required pattern="^0\d{10}$" (change)="isExisting($event,'phoneNumber')" />
                     <mat-error *ngIf="
                         studentDataForm.controls['phone'].hasError('required')
                       ">Phone Number is required</mat-error>
@@ -132,14 +130,10 @@
             </form>
           </div>
           <div class="card-action space-x-2">
-            <!-- <button 
-              class="rounded-full rounded-full custom-btn" (click)="opener()">
-              Report
-              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-            </button> -->
             <button matStepperNext class="rounded-full rounded-full custom-btn">
               Next
             </button>
+            
           </div>
         </mat-step>
         <mat-step label="Course Registration" [stepControl]="courseForm">

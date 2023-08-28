@@ -17,7 +17,7 @@ import { HttpResponse } from 'src/app/shared/model/HttpResponse';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { VoucherService } from 'src/app/shared/service/voucher.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
-import { Observable } from 'rxjs';
+
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -155,13 +155,15 @@ export class RegisterPageComponent implements OnInit {
 
     this.enrollmentService.enrollStudent(this.studentId, requestBody).subscribe(
       (response) => {
+        this.voucherService.getStudentAndCourseListById(this.studentId);
         const dialogRef = this.dialog.open(SuccessDialogComponent, {
           data: {
             message: 'Registration successful! You will hear from us soon!',
-            downloadPdf: 'Download PDF'
+            downloadPdf: 'Download PDF',
+            studentId:this.studentId
           }
         });
-    
+
         dialogRef.afterClosed().subscribe(async (result: boolean) => {
           if (result) {
             this.router.navigate(['register']);
@@ -177,8 +179,8 @@ export class RegisterPageComponent implements OnInit {
         this.router.navigate(['register']);
       }
     );
-    
-    
+
+
   }
 
   isCourseSelected(): boolean {
@@ -208,16 +210,15 @@ export class RegisterPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.postEnrollment();
-        // this.VoucherService.runReport('Enlightened Academy');
       }
     });
   }
 
-  isExisting(value: any, type: string) {
+  isExisting(value: any, type: 'cnic' | 'email' | 'phoneNumber') {
     let errorMessage = '';
     if (type === 'email') {
       errorMessage = 'Email Already Exists';
-    } else if (type === 'phone') {
+    } else if (type === 'phoneNumber') {
       errorMessage = 'Phone Number Already Exists';
     } else if (type === 'cnic') {
       errorMessage = 'Cnic Already Exists';
@@ -225,29 +226,14 @@ export class RegisterPageComponent implements OnInit {
 
     this.checkIfExistsAndHandleError(value.target.value, type, errorMessage);
   }
+
   private checkIfExistsAndHandleError(
     value: any,
-    type: string,
+    type: 'cnic' | 'email' | 'phoneNumber',
     errorMessage: string
   ): void {
-    let checkObservable: Observable<HttpResponse>;
-
-    switch (type) {
-      case 'email':
-        checkObservable = this.studentService.studentEmailCheck(value);
-        break;
-      case 'phone':
-        checkObservable = this.studentService.studentPhoneNocheck(value);
-        break;
-      case 'cnic':
-        checkObservable = this.studentService.studentCnicCheck(value);
-        break;
-      default:
-        return;
-    }
-
-    checkObservable.subscribe({
-      next: (res: HttpResponse) => {
+    this.studentService.studentCheck(value, type).subscribe({
+      next: (res: any) => {
         if (res.status === 409) {
           this.errorDialog(errorMessage, 409);
         }
@@ -256,7 +242,7 @@ export class RegisterPageComponent implements OnInit {
         this.errorDialog(errorMessage, 409);
         if (type === 'email') {
           this.studentDataForm.controls['email'].setValue(null);
-        } else if (type === 'phone') {
+        } else if (type === 'phoneNumber') {
           this.studentDataForm.controls['phone'].setValue(null);
         } else if (type === 'cnic') {
           this.studentDataForm.controls['CNIC'].setValue(null);
@@ -264,14 +250,7 @@ export class RegisterPageComponent implements OnInit {
       },
     });
   }
-  opener():void {
-    const dialogRef = this.dialog.open(SuccessDialogComponent, {
-      data: {
-        message: 'Registration successful! You will hear from us soon!',
-        downloadPdf: 'Download PDF'
-      }
-    });
-  }
+
 }
 
 interface Course {
