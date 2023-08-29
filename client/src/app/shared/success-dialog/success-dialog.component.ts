@@ -28,15 +28,18 @@ export class SuccessDialogComponent {
     public voucherService: VoucherService,
     private dialogRef: MatDialogRef<SuccessDialogComponent>, private router: Router,) { }
 
- 
+
   generatePdf(): void {
+
     this.voucherService.getStudentAndCourseListById(this.data?.studentId).subscribe({
       next: (response: HttpResponse) => {
+
         const student = response.data as Student;
         if (student) {
           this.voucherService.student = [student];
           this.voucherService.courseList = student.enrollments as unknown as Enrollment[];
           this.voucherService.calculateTotalFee();
+          this.router.navigate(['../']);
           this.voucherService.runReport('Enlightened Academy');
         } else {
           console.error('Student data not found.');
