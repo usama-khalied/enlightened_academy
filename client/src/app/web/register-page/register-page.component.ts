@@ -17,6 +17,7 @@ import { HttpResponse } from 'src/app/shared/model/HttpResponse';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { VoucherService } from 'src/app/shared/service/voucher.service';
 import { ConfirmDialogComponent } from 'src/app/shared/confirm-dialog/confirm-dialog.component';
+import { CourseService } from 'src/app/shared/service/course.service';
 
 
 export const MY_DATE_FORMATS = {
@@ -50,6 +51,7 @@ export class RegisterPageComponent implements OnInit {
     private formBuilder: FormBuilder,
     private http: HttpClient,
     private studentService: StudentService,
+    private courseService:CourseService,
     private enrollmentService: EnrollementService,
     private router: Router,
     private dialog: MatDialog,
@@ -80,7 +82,7 @@ export class RegisterPageComponent implements OnInit {
 
   fetchCourses() {
     this.loading = true;
-    this.studentService.getCourses().subscribe({
+    this.courseService.getCourses().subscribe({
       next: (response) => {
         this.loading = false;
         this.availableCourses = response.data.map((course: any) => ({
@@ -160,13 +162,7 @@ export class RegisterPageComponent implements OnInit {
           data: {
             message: 'Registration successful! You will hear from us soon!',
             downloadPdf: 'Download PDF',
-            studentId:this.studentId
-          }
-        });
-
-        dialogRef.afterClosed().subscribe(async (result: boolean) => {
-          if (result) {
-            this.router.navigate(['register']);
+            studentId: this.studentId
           }
         });
       },
@@ -182,12 +178,30 @@ export class RegisterPageComponent implements OnInit {
 
 
   }
+  ondi(): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      height: '200px',
+      data: {
+        message: 'Are you sure you want to proceed with the Registration ?',
+        buttonText: {
+          ok: 'Yes',
+          cancel: 'No',
+        },
+      },
+    });
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        // this.postEnrollment();
 
+      }
+    });
+  }
   isCourseSelected(): boolean {
     return this.availableCourses.some((course) => course.checked);
   }
 
-  errorDialog(message: string, Status: number) {
+  errorDialog(message: string, Status: number): void {
     this.dialog.open(ErrorDialogComponent, {
       data: { message: message, status: Status },
     });
@@ -195,7 +209,7 @@ export class RegisterPageComponent implements OnInit {
   getBack() {
     this.studentService.getBack();
   }
-  onSubmit() {
+  onSubmit(): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '400px',
       height: '200px',
@@ -210,6 +224,7 @@ export class RegisterPageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: boolean) => {
       if (result) {
         this.postEnrollment();
+
       }
     });
   }
