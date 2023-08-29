@@ -29,10 +29,7 @@ export class StudentService {
     console.error('Something went wrong', error);
     return throwError(error);
   }
-  //   Get All Courses
-  getCourses(): Observable<any> {
-    return this.http.get<any>(`${environment?.apiUrl}courses/`);
-  }
+
   // Check Student Exist or  not through Cnic, Email & Phone Number
   studentCheck(value: number | string, type: 'cnic' | 'phoneNumber' | 'email'): Observable<any> {
     const params = new HttpParams().set(type, value.toString());
