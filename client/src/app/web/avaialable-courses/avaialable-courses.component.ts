@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { ApiUtilsService } from '../../api-utils.service';
 import { StudentService } from 'src/app/shared/service/student.service';
 
 
@@ -11,7 +10,7 @@ import { StudentService } from 'src/app/shared/service/student.service';
 export class AvaialableCoursesComponent {
   @Input() id: any;
   isChecked: boolean = false;
-  constructor(private apiUtil: ApiUtilsService, private studentService: StudentService) {
+  constructor( private studentService: StudentService) {
 
   }
 
