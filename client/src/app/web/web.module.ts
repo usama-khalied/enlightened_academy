@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
-import {  MAT_DATE_LOCALE } from '@angular/material/core'
+import { MAT_DATE_LOCALE } from '@angular/material/core'
 import { WebRoutingModule } from './web-routing.module';
 import { CommonModule } from '@angular/common';
 
@@ -15,10 +15,7 @@ import {
 } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
 import { NavbarComponent } from './nav-bar/nav-bar.component';
-import { CoursesPageComponent } from './courses-page/courses-page.component';
 import { RegisterPageComponent } from './register-page/register-page.component';
-import { StudentdataformComponent } from './studentdataform/studentdataform.component';
-import { CoursesInformationComponent } from './courses-information/courses-information.component';
 import { AvaialableCoursesComponent } from './avaialable-courses/avaialable-courses.component';
 import { HomeComponent } from './home/home.component';
 import { ErrorDialogComponent } from '../shared/error-dialog/error-dialog.component';
@@ -28,29 +25,26 @@ import { FooterComponent } from './footer/footer.component';
 import { CeoMessageComponent } from './home/ceo-message/ceo-message.component';
 import { WebComponent } from './web.component';
 import { MaterialModule } from '../shared/material/material.module';
-import { LoaderComponent } from '../shared/loader/loader.component';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
 @NgModule({
   declarations: [
     NavbarComponent,
-    CoursesPageComponent,
     RegisterPageComponent,
-    StudentdataformComponent,
-    CoursesInformationComponent,
     AvaialableCoursesComponent,
     HomeComponent,
     ErrorDialogComponent,
-    LoaderComponent,
+
     successDialogComponent.SuccessDialogComponent,
     SidenavComponent,
     FooterComponent,
     CeoMessageComponent,
     WebComponent,
     ConfirmDialogComponent
-    
+
   ],
 
   imports: [
@@ -64,9 +58,9 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
     MomentDateModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
+    SharedModule
   ],
- 
+
   providers: [
     {
       provide: 'SocialAuthServiceConfig',
@@ -88,4 +82,4 @@ import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class WebModule {}
+export class WebModule { }

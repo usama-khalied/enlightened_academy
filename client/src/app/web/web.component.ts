@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   '<app-nav-bar></app-nav-bar><router-outlet></router-outlet> <app-footer> </app-footer>'
 })
 export class WebComponent {
-  title = 'enlighten';
 }
