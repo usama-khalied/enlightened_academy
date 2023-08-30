@@ -14,14 +14,12 @@
       </div>
       <div class="card-title">
         <h3>{{course.name}}</h3>
+        <p>{{ course.fee | currency:"PKR ":"symbol":"1.0-0" }}</p>
       </div>
       <div class="card-description">
         <p> {{course.description}}</p>
       </div>
-
     </div>
-
-
   </div>
 </div>
 <ng-container *ngIf="loading">

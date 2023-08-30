@@ -6,9 +6,4 @@ import { Component,Input } from '@angular/core';
   styleUrls: ['./view-course.component.css']
 })
 export class ViewCourseComponent {
-  // @Input() courseBackground:any;
-  // @Input() courseDescription:any;
-  // @Input() courseName:any;
-  // @Input() courseFee:any;
-
 }
