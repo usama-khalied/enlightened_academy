@@ -16,10 +16,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Optional;
 
 /**
  *
@@ -67,7 +69,7 @@ public class CourseController {
     }
 
     @GetMapping(path = {""}, name = "course-get-all", produces = "application/json")
-    public ResponseEntity<HttpResponse> getCourse(HttpServletRequest request) {
+    public ResponseEntity<HttpResponse> getCourses(HttpServletRequest request) {
 
         String logPrefix = request.getRequestURI();
         HttpResponse response = new HttpResponse(request.getRequestURI());
@@ -80,4 +82,21 @@ public class CourseController {
         response.setData(courses);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
+
+//  @GetMapping("/{courseId}") // Handles GET requests with a course ID in the path
+//    public ResponseEntity<HttpResponse> getCourseById(@PathVariable String courseId) {
+//        List<Course> optionalCourse = courseRepository.findByCourseId(courseId);
+//
+//        if (optionalCourse.isEmpty()) {
+//            // Course not found, return an appropriate response
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//
+//        // Create a response object
+//        HttpResponse response = new HttpResponse("Course details for ID: " + courseId);
+//        response.setStatus(HttpStatus.OK);
+//        response.setData(optionalCourse);
+//
+//        return ResponseEntity.status(response.getStatus()).body(response);
+//    }
 }
