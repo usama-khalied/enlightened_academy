@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  *
@@ -83,20 +84,15 @@ public class CourseController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
-//  @GetMapping("/{courseId}") // Handles GET requests with a course ID in the path
-//    public ResponseEntity<HttpResponse> getCourseById(@PathVariable String courseId) {
-//        List<Course> optionalCourse = courseRepository.findByCourseId(courseId);
-//
-//        if (optionalCourse.isEmpty()) {
-//            // Course not found, return an appropriate response
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        // Create a response object
-//        HttpResponse response = new HttpResponse("Course details for ID: " + courseId);
-//        response.setStatus(HttpStatus.OK);
-//        response.setData(optionalCourse);
-//
-//        return ResponseEntity.status(response.getStatus()).body(response);
-//    }
+    @GetMapping(path = {"/{courseId}"}, name = "get-student-by-id", produces = "application/json")
+    public ResponseEntity<HttpResponse> getCourse(HttpServletRequest request, @PathVariable UUID courseId) {
+        String logPrefix = request.getRequestURI();
+        HttpResponse response = new HttpResponse(request.getRequestURI());
+        Logger.application.info(Logger.pattern, AcademyApplication.VERSION, logPrefix, "", "");
+        Optional<Course> course = courseRepository.findById(String.valueOf(courseId));
+        //Set and Send Response
+        response.setStatus(HttpStatus.OK);
+        response.setData(course);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
 }
