@@ -1,0 +1,22 @@
+<persistence-unit name="YourPersistenceUnitName" transaction-type="RESOURCE_LOCAL">
+    <!-- Specify the JPA provider (Hibernate) -->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+    <!-- Specify the JDBC properties for the database connection -->
+    <properties>
+        <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/enlightened_academy" />
+        <property name="javax.persistence.jdbc.user" value="root" />
+        <property name="javax.persistence.jdbc.password" value="root" />
+        
+        <!-- Specify dialect for MySQL -->
+        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
+
+        <!-- Show SQL queries in logs (optional) -->
+        <property name="hibernate.show_sql" value="true" />
+        <property name="hibernate.format_sql" value="true" />
+
+        <!-- Automatically create tables based on entity classes (useful for development) -->
+        <property name="hibernate.hbm2ddl.auto" value="create" />
+    </properties>
+</persistence-unit>

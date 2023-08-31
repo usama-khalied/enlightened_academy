@@ -1,0 +1,49 @@
+/* custom-loader.component.css */
+.custom-loader {
+  /* Make the loader take the full height of the screen */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px); /* Use backdrop-filter for the blur effect */
+  background-color: transparent; /* Set the background color to blue with transparency */
+}
+.custom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+width: 400px;
+height: 200px;
+border: 1px solid #302a77;
+h2 {
+  font-size: 30px;
+}
+p {
+  font-size: 20px;
+}
+}
+.loader-circle {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #ccc;
+  border-top: 4px solid #302a77;
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+ 
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -16,10 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  *
@@ -67,7 +70,7 @@ public class CourseController {
     }
 
     @GetMapping(path = {""}, name = "course-get-all", produces = "application/json")
-    public ResponseEntity<HttpResponse> getCourse(HttpServletRequest request) {
+    public ResponseEntity<HttpResponse> getCourses(HttpServletRequest request) {
 
         String logPrefix = request.getRequestURI();
         HttpResponse response = new HttpResponse(request.getRequestURI());
@@ -78,6 +81,18 @@ public class CourseController {
         //Set and Send Response
         response.setStatus(HttpStatus.OK);
         response.setData(courses);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    @GetMapping(path = {"/{courseId}"}, name = "get-student-by-id", produces = "application/json")
+    public ResponseEntity<HttpResponse> getCourse(HttpServletRequest request, @PathVariable UUID courseId) {
+        String logPrefix = request.getRequestURI();
+        HttpResponse response = new HttpResponse(request.getRequestURI());
+        Logger.application.info(Logger.pattern, AcademyApplication.VERSION, logPrefix, "", "");
+        Optional<Course> course = courseRepository.findById(String.valueOf(courseId));
+        //Set and Send Response
+        response.setStatus(HttpStatus.OK);
+        response.setData(course);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 }

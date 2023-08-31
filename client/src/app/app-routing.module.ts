@@ -1,25 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CoursesPageComponent } from './courses-page/courses-page.component';
-import { RegisterPageComponent } from './register-page/register-page.component';
-import { CoursesInformationComponent } from './courses-information/courses-information.component';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+
+
 
 const routes: Routes = [
+  { path: '', redirectTo: 'web', pathMatch:'full' },
 
-{
-  path: 'courses',
-  component: CoursesInformationComponent
-},
-{
-  path: 'register',
-  component: RegisterPageComponent
-},
-{
-  path: '',
-  component: HomeComponent
-},
+  { path: 'web', loadChildren: () => import('./web/web.module').then(m => m.WebModule)},
+  {path:'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule)}
 ];
 
 @NgModule({

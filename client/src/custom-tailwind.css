@@ -1,0 +1,24 @@
+.custom-blue {
+  background-color: #302a77;
+}
+.custom-btn-bg {
+  color: #302a77;
+  background-color: white;
+  padding: 8px 12px;
+}
+.custom-btn {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  color: white;
+  background-color: #302a77;
+  padding: 6px 16px;
+}
+.fa {
+  margin: 0 2px 0;
+}
+@media only screen and (max-width: 480px) {
+  .custom-btn-bg, .custom-btn-bg {
+    font-size: 16px;
+  }
+}

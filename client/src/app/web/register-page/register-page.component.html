@@ -1,0 +1,175 @@
+<!-- <app-nav-bar></app-nav-bar> -->
+<div class="container-fluid">
+  <mat-card class="stepper-card">
+    <mat-card-header>
+      <mat-card-title>Registration</mat-card-title>
+      <mat-card-subtitle>Student Registration Form</mat-card-subtitle>
+    </mat-card-header>
+    <div class="stepper-container">
+      <mat-horizontal-stepper color="primary" class="stepper" [linear]="false">
+        <mat-step label="Student Information" [stepControl]="studentDataForm">
+          <div class="form-container">
+            <form [formGroup]="studentDataForm" (submit)="submitForm()">
+              <div class="list-group-item">
+                <div class="form-row">
+                  <mat-form-field class="border-#a0ce4e" appearance="outline">
+                    <input placeholder="First Name" matInput type="text" formControlName="firstName" required
+                      name="firstName" />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['firstName'].hasError(
+                          'required'
+                        )
+                      ">
+                      Product Code is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field class="border-#a0ce4e" appearance="outline">
+                    <!-- <mat-label>Last Name </mat-label> -->
+                    <input placeholder="Last Name" matInput type="text" formControlName="lastName" required />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['lastName'].hasError(
+                          'required'
+                        )
+                      ">Last Name is required</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <input placeholder="CNIC" matInput type="text" formControlName="CNIC" [maxLength]="13" required
+                      pattern="^\d{13}$" (change)="isExisting($event,'cnic')" />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['CNIC'].hasError('required')
+                      ">CNIC is required</mat-error>
+                    <mat-error *ngIf="
+                        studentDataForm.controls['CNIC'].hasError('pattern')
+                      ">Invalid CNIC (must be 13 digits)</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <input placeholder="Father's CNIC " matInput type="text" formControlName="fathersCNIC"
+                      [maxLength]="13" required pattern="^\d{13}$" />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['fathersCNIC'].hasError(
+                          'required'
+                        )
+                      ">Father's CNIC is required</mat-error>
+                    <mat-error *ngIf="
+                        studentDataForm.controls['fathersCNIC'].hasError(
+                          'pattern'
+                        )
+                      ">Invalid Father's CNIC (must be 13 digits)</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <!-- <mat-label> Email </mat-label> -->
+                    <input matInput placeholder="Email" type="email" formControlName="email" required
+                      (change)="isExisting($event,'email')" />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['email'].hasError('required')
+                      ">Email is required</mat-error>
+                    <mat-error *ngIf="
+                        studentDataForm.controls['email'].hasError('email')
+                      ">Invalid email</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <input matInput placeholder="Phone Number" type="tel" formControlName="phone" [maxLength]="11"
+                      required pattern="^0\d{10}$" (change)="isExisting($event,'phoneNumber')" />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['phone'].hasError('required')
+                      ">Phone Number is required</mat-error>
+                    <mat-error *ngIf="
+                        studentDataForm.controls['phone'].hasError('pattern')
+                      ">Invalid Phone Number (must start with 0, 11
+                      digits)</mat-error>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" placeholder="Date of Birth">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-error *ngIf="
+                    studentDataForm.controls['dateOfBirth'].hasError(
+                      'required'
+                    )
+                  ">Date of Birth is required</mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-select formControlName="qualification" placeholder="Qualification">
+                      <mat-option value="Under Matric">Under Matric</mat-option>
+                      <mat-option value="Matric O-Level">Matric O-Level</mat-option>
+                      <mat-option value="Matric A-Level">Matric A-Level</mat-option>
+                      <mat-option value="Intermediate">Intermediate</mat-option>
+                      <mat-option value="Graduate">Graduate</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="
+                        studentDataForm.controls['qualification'].hasError(
+                          'required'
+                        )
+                      ">Qualification is required</mat-error>
+                  </mat-form-field>
+                  <mat-form-field style="height: 80px;" appearance="outline">
+                    <mat-select formControlName="gender" placeholder="Gender">
+                      <mat-option value="M">Male</mat-option>
+                      <mat-option value="F">Female</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="
+                        studentDataForm.controls['gender'].hasError('required')
+                      ">Gender is required</mat-error>
+                  </mat-form-field>
+                  <mat-form-field class="address" appearance="outline">
+                    <input matInput placeholder="Address" type="text" formControlName="address" required />
+                    <mat-error *ngIf="
+                        studentDataForm.controls['address'].hasError('required')
+                      ">Address is required</mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+            </form>
+          </div>
+          <div class="card-action space-x-2">
+            <button matStepperNext class="rounded-full rounded-full custom-btn">
+              Next
+            </button>
+          </div>
+        </mat-step>
+        <mat-step label="Course Registration" [stepControl]="courseForm">
+          <div class="course-item">
+            <p class="fw-bold">Courses</p>
+            <p class="fw-bold">Price</p>
+          </div>
+          <div class="list">
+            <div *ngFor="let course of availableCourses" class="course-item">
+
+              <mat-checkbox color="primary" [(ngModel)]="course.checked" class="checkbox"
+                (change)="updateCourseSelection()">
+
+                {{ course?.name }}
+              </mat-checkbox>
+
+              <p class="course-price">Rs.{{ course?.fee}}</p>
+
+            </div>
+            <div class="underline"></div>
+            <mat-error *ngIf="!isCourseSelected()">Please select at least one course</mat-error>
+          </div>
+          <ng-template matStepIcon> </ng-template>
+          <div class="stepper-buttons">
+            <button matStepperPrevious class="rounded-full rounded-full custom-btn mx-0.5">
+              Back
+            </button>
+            <button matStepperNext [disabled]="!isCourseSelected()" (click)="onSubmit()"
+              class="rounded-full rounded-full custom-btn">
+              Confirm
+            </button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </div>
+  </mat-card>
+</div>
+<ng-container *ngIf="loading">
+  <app-loader></app-loader>
+</ng-container>

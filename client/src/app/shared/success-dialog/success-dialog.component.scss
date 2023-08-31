@@ -1,0 +1,88 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px;
+  text-align: center;
+  background-color: white;
+  border-radius: 8px;
+  width: 600px;
+  height: 60vh;
+  animation: fadeIn ease 1s;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.75);
+}
+
+/* .dialog styles */
+.dialog {
+  padding: 20px; /* Adjust padding for content */
+
+  h1 {
+    font-size: 30px;
+    color: green;
+    padding: 10px 0;
+  }
+
+  button {
+    margin: 10px auto; /* Adjust margin for centering */
+  }
+
+  p {
+    padding: 10px 0;
+  }
+}
+
+.fa-file-pdf-o {
+  margin: 0 5px !important;
+}
+
+button {
+  color: white;
+}
+
+// button {
+//   margin-top: 20px;
+//   color: #721c24;
+//   border-color: #721c24;
+//   transition: all .3s;
+
+//   &:hover {
+//     background-color: #721c24;
+//     color: #f8d7da;
+//   }
+// }
+@media (max-width: 768px) {
+  /* Adjust styles for screens up to 768px width (e.g., tablets) */
+
+  :host {
+    width: 90%; /* Adjust width to fit smaller screens */
+    padding: 10px; /* Adjust padding for smaller screens */
+    align-items: center; /* Center vertically */
+  }
+
+  .dialog {
+    width: 100%; /* Full width for dialog content */
+    padding-block: 10px; /* Reduce vertical padding for smaller screens */
+    text-align: center; /* Center text horizontally */
+  }
+
+  /* Other element adjustments as needed */
+}
+
+@media (max-width: 480px) {
+  /* Adjust styles for screens up to 480px width (e.g., mobile phones) */
+
+  :host {
+    padding: 5px; /* Further reduce padding for smaller screens */
+  }
+
+  .dialog {
+    padding-block: 5px; /* Further reduce vertical padding for smaller screens */
+  }
+
+  /* Other element adjustments as needed */
+}
+
+
+
+

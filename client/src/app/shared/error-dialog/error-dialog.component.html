@@ -1,0 +1,8 @@
+<div [@dialog] class="dialog">
+  <h1>Error!</h1>
+  <p>Message: {{ data.message }}</p>
+  <p>Status: {{ data.status }}</p>
+  <button (click)="closeDialog()" class="rounded-full rounded-full custom-btn mx-0.5">
+    Close
+  </button>
+</div>

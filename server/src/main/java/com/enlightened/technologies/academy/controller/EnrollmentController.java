@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.enlightened.technologies.academy.controller;
 
 import com.enlightened.technologies.academy.AcademyApplication;
 import com.enlightened.technologies.academy.model.Course;
 import com.enlightened.technologies.academy.model.CourseList;
 import com.enlightened.technologies.academy.model.Enrollment;
+import com.enlightened.technologies.academy.model.EnrollmentList;
 import com.enlightened.technologies.academy.model.Student;
 import com.enlightened.technologies.academy.repository.CourseRepository;
 import com.enlightened.technologies.academy.repository.StudentRepository;
@@ -18,16 +15,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -70,7 +63,7 @@ public class EnrollmentController {
 
         //Check if Courses are valid
         List<Enrollment> savedEnrollmentList = new ArrayList<>();
-        
+
         for (CourseList requestCourse : requestBody) {
 
             Optional<Course> getCourse = courseRepository.findById(requestCourse.getId());
@@ -84,7 +77,7 @@ public class EnrollmentController {
 
             //Create Composite Key
             String compositeKey = studentId + "-" + requestCourse.getId();
-            //Check if enrollment is present        
+            //Check if enrollment is present
             Optional<Enrollment> optionalEnrollment = enrollmentRepository.findById(compositeKey);
 
             if (optionalEnrollment.isPresent()) {
@@ -126,4 +119,58 @@ public class EnrollmentController {
         return ResponseEntity.status(response.getStatus()).body(response);
     }
 
+    @GetMapping(path = {"/{courseId}"}, name = "get-enrollment-by-id", produces = "application/json")
+    public ResponseEntity<HttpResponse> getEnrollment(HttpServletRequest request, @PathVariable String courseId) {
+        String logPrefix = request.getRequestURI();
+        HttpResponse response = new HttpResponse(request.getRequestURI());
+
+        Optional<Enrollment> enrollmentOptional = enrollmentRepository.findById(String.valueOf(courseId));
+        if (enrollmentOptional.isEmpty()) {
+            return buildErrorResponse(response, logPrefix, "Enrollment Record not Found", HttpStatus.NOT_FOUND);
+        }
+        Enrollment enrollment = enrollmentOptional.get();
+        response.setStatus(HttpStatus.OK);
+        response.setData(enrollment);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    private ResponseEntity<HttpResponse> buildErrorResponse(HttpResponse response, String logPrefix, String errorMessage, HttpStatus httpStatus) {
+        Logger.application.info(Logger.pattern, AcademyApplication.VERSION, logPrefix, errorMessage);
+        response.setStatus(httpStatus);
+        response.setError(errorMessage);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
+
+    @GetMapping(path = {"/{studentId}/"}, name = "enrollment-get-by-id", produces = "application/json")
+    public ResponseEntity<HttpResponse> getEnrollmentsByStudentId(HttpServletRequest request, @PathVariable String studentId) {
+
+        String logPrefix = request.getRequestURI();
+        HttpResponse response = new HttpResponse(request.getRequestURI());
+        Logger.application.info(Logger.pattern, AcademyApplication.VERSION, logPrefix, "", "");
+
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+
+        if (!optionalStudent.isPresent()) {
+            Logger.application.info(Logger.pattern, AcademyApplication.VERSION, logPrefix, "NOT_FOUND: " + studentId);
+            response.setStatus(HttpStatus.NOT_FOUND);
+            response.setError("Student Not Found");
+            return ResponseEntity.status(response.getStatus()).body(response);
+        }
+
+        List<Enrollment> enrollments = enrollmentRepository.findByStudentId(optionalStudent.get().getId());
+        List<EnrollmentList> smallList = new ArrayList<>();
+
+        for (Enrollment enrollment : enrollments) {
+            EnrollmentList obj = new EnrollmentList();
+            Optional<Course> objCourse = courseRepository.findById(enrollment.getCourse().getId());
+            obj.setStudent(optionalStudent.get());
+            obj.setCourseName(objCourse.get().getName());
+            obj.setFee(objCourse.get().getFee());
+            smallList.add(obj);
+        }
+        //Set and Send Response
+        response.setStatus(HttpStatus.OK);
+        response.setData(smallList);
+        return ResponseEntity.status(response.getStatus()).body(response);
+    }
 }
